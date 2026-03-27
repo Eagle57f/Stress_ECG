@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Stress-prepa: un d&eacute;compte du temps restant avant les concours pr&eacute;pa.">
+	<title>Temps avant les concours ECG</title>
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	<header class="ticker-header" aria-label="Message important">
+		<div class="ticker-track" data-ticker-text="C'est la derniere ligne droite, il faut travailler maintenant ! Chaque minute à ne pas travailler, c'est une place de moins au concours !"></div>
+	</header>
+
+	<main id="attenteres" class="container">
+		<section id="countdown">
+			<h1 id="headline">Temps avant ECRICOME :</h1>
+
+			<ul class="metrics">
+				<li><span id="days0">0</span>Jour(s)</li>
+				<li><span id="hours0">0</span>Heure(s)</li>
+				<li><span id="minutes0">0</span>Minute(s)</li>
+				<li><span id="seconds0">0</span>Seconde(s)</li>
+			</ul>
+		</section>
+
+		<section id="countdown-bce" class="countdown-secondary">
+			<h1>Temps avant la BCE :</h1>
+
+			<ul class="metrics">
+				<li><span id="daysBce">0</span>Jour(s)</li>
+				<li><span id="hoursBce">0</span>Heure(s)</li>
+				<li><span id="minutesBce">0</span>Minute(s)</li>
+				<li><span id="secondsBce">0</span>Seconde(s)</li>
+			</ul>
+
+			<ul class="metrics">
+				<li><span id="percent0">0.000000</span>Pourcentage d'avancement de l'ann&eacute;e</li>
+			</ul>
+		</section>
+	</main>
+
+	<footer>
+		<p>Repris en 10min du site <a href="https://www.stress-prepa.fr" target="_blank" rel="noopener noreferrer">Stress Prepa</a></p>
+	</footer>
+
+	<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	align-items: center;
+	background-color: #ebae3d;
+    background-image: linear-gradient(rgb(226, 210, 255), rgb(165, 204, 255));
+	color: #333;
+	display: flex;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 72px 20px 20px;
+	position: relative;
+}
+
+.ticker-header {
+	background-color: #1f1f1f;
+	color: #f7f7f7;
+	left: 0;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 10;
+}
+
+.ticker-track {
+	display: flex;
+	font-size: 0;
+	gap: 0;
+	padding: 12px 0;
+	transform: translateX(0);
+	white-space: nowrap;
+	will-change: transform;
+	width: max-content;
+}
+
+.ticker-item {
+	flex-shrink: 0;
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	padding-right: 2rem;
+}
+
+.ticker-highlight {
+	background-image: linear-gradient(90deg, #8ad6ff 0%, #f6a6ff 50%, #ffe08a 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	display: inline-block;
+}
+
+.container {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.countdown-secondary {
+	margin-top: 1.5rem;
+}
+
+h1 {
+	font-weight: 400;
+	letter-spacing: 0.125rem;
+	text-transform: uppercase;
+}
+
+h2 {
+	font-weight: 300;
+	letter-spacing: 0.125rem;
+	margin-top: 14px;
+}
+
+.metrics {
+	margin-top: 12px;
+}
+
+li {
+	display: inline-block;
+	font-size: 1.2em;
+	list-style-type: none;
+	padding: 1em;
+	text-transform: uppercase;
+}
+
+li span {
+	display: block;
+	font-size: 4rem;
+}
+
+a {
+	color: inherit;
+}
+
+footer {
+	align-items: center;
+	bottom: 12px;
+	display: flex;
+	gap: 15px;
+	left: 50%;
+	position: fixed;
+	transform: translateX(-50%);
+}
+
+footer .fa-book {
+	color: #2f2f2f;
+	font-size: 52px;
+	line-height: 1;
+}
+
+@media all and (max-width: 700px) {
+	h1 {
+		font-size: 1rem;
+	}
+
+	h2 {
+		font-size: 0.8rem;
+	}
+
+	li {
+		font-size: 1rem;
+		padding: 0.75rem;
+	}
+
+	li span {
+		font-size: 2rem;
+	}
+
+	.ticker-item {
+		font-size: 0.72rem;
+	}
+
+	footer .fa-book,
+	footer svg {
+		height: 44px;
+		width: 44px;
+	}
+}
