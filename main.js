@@ -3,77 +3,101 @@
 	const MINUTE = SECOND * 60;
 	const HOUR = MINUTE * 60;
 	const DAY = HOUR * 24;
-
-	const concoursDate = new Date("Apr 14, 2026 08:00:00").getTime();
-	const bceDate = new Date("Apr 22, 2026 08:00:00").getTime();
-	const rentreeDate = new Date("Sep 1, 2024 08:00:00").getTime();
+	const ECRICOME_MONTH = 3;
+	const ECRICOME_DAY = 14;
+	const BCE_MONTH = 3;
+	const BCE_DAY = 22;
+	const RENTREE_MONTH = 8;
+	const RENTREE_DAY = 1;
+	const EXAM_HOUR = 8;
+	const headlineElement = document.getElementById("headline");
 	const percentElement = document.getElementById("percent0");
 	const tickerTrack = document.querySelector(".ticker-track");
-	const bceElements = {
-		days: document.getElementById("daysBce"),
-		hours: document.getElementById("hoursBce"),
-		minutes: document.getElementById("minutesBce"),
-		seconds: document.getElementById("secondsBce")
-	};
 	const tickerSpeed = 80;
 	let tickerOffset = 0;
 	let tickerLastTime = 0;
 	let tickerItemWidth = 0;
 	let tickerRafId = null;
 
-	function updatePercent(now, distance) {
-		const tempsPasse = now - rentreeDate;
-		const total = distance + tempsPasse;
-		const pourcentage = total > 0 ? (tempsPasse / total) * 100 : 100;
+	function createDate(year, month, day) {
+		return new Date(year, month, day, EXAM_HOUR, 0, 0, 0).getTime();
+	}
+
+	function clamp(value, min, max) {
+		return Math.min(max, Math.max(min, value));
+	}
+
+	function getActiveCountdown(now) {
+		const year = new Date(now).getFullYear();
+		const ecricomeDate = createDate(year, ECRICOME_MONTH, ECRICOME_DAY);
+		const bceDate = createDate(year, BCE_MONTH, BCE_DAY);
+
+		if (now < ecricomeDate) {
+			return {
+				label: "ECRICOME",
+				targetDate: ecricomeDate
+			};
+		}
+
+		if (now < bceDate) {
+			return {
+				label: "BCE",
+				targetDate: bceDate
+			};
+		}
+
+		return {
+			label: "ECRICOME",
+			targetDate: createDate(year + 1, ECRICOME_MONTH, ECRICOME_DAY)
+		};
+	}
+
+	function updatePercent(now, targetDate) {
+		const targetYear = new Date(targetDate).getFullYear();
+		const rentreeDate = createDate(targetYear - 1, RENTREE_MONTH, RENTREE_DAY);
+		const total = targetDate - rentreeDate;
+		const elapsed = now - rentreeDate;
+		const pourcentage = total > 0 ? clamp((elapsed / total) * 100, 0, 100) : 100;
 		percentElement.innerText = pourcentage.toFixed(6);
 	}
 
-	function updateCountdown() {
-		const now = Date.now();
-		const distance = concoursDate - now;
-		updatePercent(now, distance);
-
-		if (distance <= 0) {
-			document.getElementById("days0").innerText = "0";
-			document.getElementById("hours0").innerText = "0";
-			document.getElementById("minutes0").innerText = "0";
-			document.getElementById("seconds0").innerText = "0";
-			percentElement.innerText = "100.000000";
-			return;
-		}
-
+	function setMainCountdownValues(distance) {
 		document.getElementById("days0").innerText = Math.floor(distance / DAY);
 		document.getElementById("hours0").innerText = Math.floor((distance % DAY) / HOUR);
 		document.getElementById("minutes0").innerText = Math.floor((distance % HOUR) / MINUTE);
 		document.getElementById("seconds0").innerText = Math.floor((distance % MINUTE) / SECOND);
 	}
 
-	function updateBceCountdown() {
-		const now = Date.now();
-		const distance = bceDate - now;
+	function setMainCountdownToZero() {
+		document.getElementById("days0").innerText = "0";
+		document.getElementById("hours0").innerText = "0";
+		document.getElementById("minutes0").innerText = "0";
+		document.getElementById("seconds0").innerText = "0";
+	}
 
-		if (!bceElements.days || !bceElements.hours || !bceElements.minutes || !bceElements.seconds) {
-			return;
+	function updateCountdown() {
+		const now = Date.now();
+		const activeCountdown = getActiveCountdown(now);
+		const distance = activeCountdown.targetDate - now;
+
+		if (headlineElement) {
+			headlineElement.innerText = `Temps avant ${activeCountdown.label} :`;
 		}
+
+		updatePercent(now, activeCountdown.targetDate);
 
 		if (distance <= 0) {
-			bceElements.days.innerText = "0";
-			bceElements.hours.innerText = "0";
-			bceElements.minutes.innerText = "0";
-			bceElements.seconds.innerText = "0";
+			setMainCountdownToZero();
 			return;
 		}
 
-		bceElements.days.innerText = Math.floor(distance / DAY);
-		bceElements.hours.innerText = Math.floor((distance % DAY) / HOUR);
-		bceElements.minutes.innerText = Math.floor((distance % HOUR) / MINUTE);
-		bceElements.seconds.innerText = Math.floor((distance % MINUTE) / SECOND);
+		setMainCountdownValues(distance);
 	}
 
 	function refreshPercentOnly() {
 		const now = Date.now();
-		const distance = concoursDate - now;
-		updatePercent(now, distance);
+		const activeCountdown = getActiveCountdown(now);
+		updatePercent(now, activeCountdown.targetDate);
 	}
 
 	function clearTicker() {
@@ -175,9 +199,7 @@
 	}
 
 	updateCountdown();
-	updateBceCountdown();
 	setInterval(updateCountdown, 1000);
-	setInterval(updateBceCountdown, 1000);
 	setInterval(refreshPercentOnly, 100);
 	initTicker();
 	window.addEventListener("resize", initTicker);
