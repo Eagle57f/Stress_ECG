@@ -11,7 +11,7 @@ body {
 
 body {
 	align-items: center;
-	background-color: #ebae3d;
+	background-color: rgb(165, 204, 255);
     background-image: linear-gradient(rgb(226, 210, 255), rgb(165, 204, 255));
 	color: #333;
 	display: flex;
