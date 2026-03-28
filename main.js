@@ -198,9 +198,113 @@
 		tickerRafId = requestAnimationFrame(animateTicker);
 	}
 
-	updateCountdown();
-	setInterval(updateCountdown, 1000);
+	// Gestion des cookies et du mode
+	function setCookie(name, value, days = 365) {
+		const date = new Date();
+		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+		const expires = "expires=" + date.toUTCString();
+		document.cookie = name + "=" + value + ";" + expires + ";path=/";
+	}
+
+	function getCookie(name) {
+		const nameEQ = name + "=";
+		const cookies = document.cookie.split(";");
+		for (let i = 0; i < cookies.length; i++) {
+			let cookie = cookies[i].trim();
+			if (cookie.indexOf(nameEQ) === 0) {
+				return cookie.substring(nameEQ.length);
+			}
+		}
+		return null;
+	}
+
+	function setCountdownMode(mode) {
+		const countdownSection = document.getElementById("countdown");
+		const countdownBceSection = document.getElementById("countdown-bce");
+		const modeBtn = document.getElementById("modeToggleBtn");
+
+		if (mode === "dual") {
+			// Afficher les deux compteurs
+			if (countdownSection) countdownSection.style.display = "block";
+			if (countdownBceSection) countdownBceSection.style.display = "block";
+			if (headlineElement) headlineElement.innerText = "Temps avant ECRICOME :";
+			if (modeBtn) modeBtn.innerText = "Afficher 1 compteur";
+			setCookie("countdownMode", "dual");
+		} else {
+			// Mode alternant (par défaut)
+			if (countdownSection) countdownSection.style.display = "block";
+			if (countdownBceSection) countdownBceSection.style.display = "none";
+			if (modeBtn) modeBtn.innerText = "Afficher 2 compteurs";
+			setCookie("countdownMode", "single");
+		}
+	}
+
+	function updateDualCountdown() {
+		const now = Date.now();
+		const year = new Date(now).getFullYear();
+		const ecricomeDate = createDate(year, ECRICOME_MONTH, ECRICOME_DAY);
+		const bceDate = createDate(year, BCE_MONTH, BCE_DAY);
+
+		// Update ECRICOME
+		let distanceEcricome = ecricomeDate - now;
+		if (distanceEcricome <= 0) {
+			distanceEcricome = createDate(year + 1, ECRICOME_MONTH, ECRICOME_DAY) - now;
+		}
+
+		document.getElementById("days0").innerText = Math.floor(distanceEcricome / DAY);
+		document.getElementById("hours0").innerText = Math.floor((distanceEcricome % DAY) / HOUR);
+		document.getElementById("minutes0").innerText = Math.floor((distanceEcricome % HOUR) / MINUTE);
+		document.getElementById("seconds0").innerText = Math.floor((distanceEcricome % MINUTE) / SECOND);
+
+		// Update BCE
+		let distanceBce = bceDate - now;
+		if (distanceBce <= 0) {
+			distanceBce = createDate(year + 1, BCE_MONTH, BCE_DAY) - now;
+		}
+
+		document.getElementById("daysBce").innerText = Math.floor(distanceBce / DAY);
+		document.getElementById("hoursBce").innerText = Math.floor((distanceBce % DAY) / HOUR);
+		document.getElementById("minutesBce").innerText = Math.floor((distanceBce % HOUR) / MINUTE);
+		document.getElementById("secondsBce").innerText = Math.floor((distanceBce % MINUTE) / SECOND);
+
+		// Update percentage
+		const targetYear = new Date(ecricomeDate).getFullYear();
+		const rentreeDate = createDate(targetYear - 1, RENTREE_MONTH, RENTREE_DAY);
+		const total = ecricomeDate - rentreeDate;
+		const elapsed = now - rentreeDate;
+		const pourcentage = total > 0 ? clamp((elapsed / total) * 100, 0, 100) : 100;
+		percentElement.innerText = pourcentage.toFixed(6);
+	}
+
+	function updateCountdownWrapper() {
+		const mode = getCookie("countdownMode") || "single";
+		if (mode === "dual") {
+			updateDualCountdown();
+		} else {
+			updateCountdown();
+		}
+	}
+
+	function toggleMode() {
+		const currentMode = getCookie("countdownMode") || "single";
+		const newMode = currentMode === "single" ? "dual" : "single";
+		setCountdownMode(newMode);
+		updateCountdownWrapper();
+	}
+
+	// Initialize countdown mode from cookie
+	const savedMode = getCookie("countdownMode") || "single";
+	setCountdownMode(savedMode);
+
+	updateCountdownWrapper();
+	setInterval(updateCountdownWrapper, 1000);
 	setInterval(refreshPercentOnly, 100);
 	initTicker();
 	window.addEventListener("resize", initTicker);
+
+	// Add mode toggle button listener
+	const modeToggleBtn = document.getElementById("modeToggleBtn");
+	if (modeToggleBtn) {
+		modeToggleBtn.addEventListener("click", toggleMode);
+	}
 })();

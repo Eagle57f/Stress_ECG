@@ -13,6 +13,10 @@
 		<div class="ticker-track" data-ticker-text="C'est la derniere ligne droite, il faut travailler maintenant ! Chaque minute à ne pas travailler, c'est une place de moins au concours !"></div>
 	</header>
 
+	<div class="mode-selector">
+		<button id="modeToggleBtn" class="mode-btn">Afficher 2 compteurs</button>
+	</div>
+
 	<main id="attenteres" class="container">
 		<section id="countdown">
 			<h1 id="headline">Temps avant ECRICOME :</h1>
@@ -23,6 +27,18 @@
 				<li><span id="minutes0">0</span>Minute(s)</li>
 				<li><span id="seconds0">0</span>Seconde(s)</li>
 			</ul>
+		</section>
+		<section id="countdown-bce" class="countdown-secondary" style="display: none;">
+			<h1>Temps avant la BCE :</h1>
+
+			<ul class="metrics">
+				<li><span id="daysBce">0</span>Jour(s)</li>
+				<li><span id="hoursBce">0</span>Heure(s)</li>
+				<li><span id="minutesBce">0</span>Minute(s)</li>
+				<li><span id="secondsBce">0</span>Seconde(s)</li>
+			</ul>
+		</section>
+		<section id="percentage-section">
 			<ul class="metrics">
 				<li><span id="percent0">0.000000</span>Pourcentage d'avancement de l'ann&eacute;e</li>
 			</ul>

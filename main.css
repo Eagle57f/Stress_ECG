@@ -61,6 +61,55 @@ body {
 	display: inline-block;
 }
 
+.mode-selector {
+	position: fixed;
+	top: 60px;
+	right: 20px;
+	z-index: 9;
+}
+
+.mode-btn {
+	background: linear-gradient(
+		135deg,
+		rgb(226, 210, 255) 0%,
+		rgb(195, 217, 255) 25%,
+		rgb(165, 204, 255) 50%,
+		rgb(195, 217, 255) 75%,
+		rgb(226, 210, 255) 100%
+	);
+	background-size: 200% 200%;
+	border: none;
+	border-radius: 8px;
+	color: #1f1f1f;
+	cursor: pointer;
+	font-size: 0.9rem;
+	font-weight: 600;
+	padding: 10px 16px;
+	transition: all 0.3s ease;
+	animation: gradientShift 6s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.mode-btn:hover {
+	transform: scale(1.05);
+	box-shadow: 0 4px 12px rgba(195, 217, 255, 0.5);
+}
+
+.mode-btn:active {
+	transform: scale(0.98);
+}
+
 .container {
 	margin: 0 auto;
 	text-align: center;
@@ -139,6 +188,12 @@ footer .fa-book {
 
 	.ticker-item {
 		font-size: 0.72rem;
+	}
+
+	.mode-btn {
+		font-size: 0.8rem;
+		padding: 8px 12px;
+		right: 10px;
 	}
 
 	footer .fa-book,
