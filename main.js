@@ -53,10 +53,19 @@
 	}
 
 	function updatePercent(now, targetDate) {
+		const currentYear = new Date(now).getFullYear();
+		const bceDateCurrentYear = createDate(currentYear, BCE_MONTH, BCE_DAY);
+		const rentreeDateCurrentYear = createDate(currentYear, RENTREE_MONTH, RENTREE_DAY);
+
+		if (now >= bceDateCurrentYear && now < rentreeDateCurrentYear) {
+			percentElement.innerText = "C'est fini !";
+			return;
+		}
+
 		const targetYear = new Date(targetDate).getFullYear();
 		const rentreeDate = createDate(targetYear - 1, RENTREE_MONTH, RENTREE_DAY);
-		const total = targetDate - rentreeDate;
-		const elapsed = now - rentreeDate;
+		const total = Math.abs(targetDate - rentreeDate);
+		const elapsed = Math.abs(now - rentreeDate);
 		const pourcentage = total > 0 ? clamp((elapsed / total) * 100, 0, 100) : 100;
 		percentElement.innerText = pourcentage.toFixed(6);
 	}
@@ -123,7 +132,7 @@
 		}
 
 		const tickerText = (tickerTrack.dataset.tickerText || "").trim();
-		const tickerHtml = tickerText.replace(/\btravailler\b/gi, '<span class="ticker-highlight">$&</span>');
+		const tickerHtml = tickerText.replace(/\bmerde\b/gi, '<span class="ticker-highlight">$&</span>');
 
 		clearTicker();
 
@@ -268,9 +277,15 @@
 		document.getElementById("secondsBce").innerText = Math.floor((distanceBce % MINUTE) / SECOND);
 
 		// Update percentage
-		const targetYear = new Date(ecricomeDate).getFullYear();
+		const rentreeDateCurrentYear = createDate(year, RENTREE_MONTH, RENTREE_DAY);
+		if (now >= bceDate && now < rentreeDateCurrentYear) {
+			percentElement.innerText = "C'est fini !";
+			return;
+		}
+
+		const targetYear = new Date(bceDate).getFullYear();
 		const rentreeDate = createDate(targetYear - 1, RENTREE_MONTH, RENTREE_DAY);
-		const total = ecricomeDate - rentreeDate;
+		const total = bceDate - rentreeDate;
 		const elapsed = now - rentreeDate;
 		const pourcentage = total > 0 ? clamp((elapsed / total) * 100, 0, 100) : 100;
 		percentElement.innerText = pourcentage.toFixed(6);
